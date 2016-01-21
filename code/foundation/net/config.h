@@ -1,7 +1,7 @@
 /*--!>
 This file is part of Nebula, a multi-purpose library mainly written in C++.
 
-Copyright 2015-2016 (lis@tutanota.com)
+Copyright 2015-2016 lis (lis@tutanota.com)
     (PGP: 0x98E65B43B03E8A6B68BA3132568ACAF1A05DE1CE)
 
 This program is free software: you can redistribute it and/or modify
