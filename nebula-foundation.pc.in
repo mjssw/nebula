@@ -1,0 +1,11 @@
+prefix=@prefix@
+exec_prefix=@exec_prefix@
+libdir=@libdir@
+includedir=@includedir@
+
+Name: Nebula.Foundation
+Description: A multi-purpose C++ library
+Version: 0.0.0
+URL: https://www.github.com/defudger/nebula
+Cflags:
+Libs: -L${libdir} -lnebula-foundation

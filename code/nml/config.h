@@ -1,0 +1,40 @@
+/*--!>
+This file is part of Nebula, a multi-purpose library mainly written in C++.
+
+Copyright 2015-2016 (lis@tutanota.com)
+    (PGP: 0x98E65B43B03E8A6B68BA3132568ACAF1A05DE1CE)
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
+--------------------------------------------------------------------------<!--*/
+#ifndef NIC_F5BC3B7209491175_NIC
+#define NIC_F5BC3B7209491175_NIC
+
+#include "../foundation/config.h"
+
+/** @ingroup NML
+ * @{
+ * */
+//------------------------------------------------------------------------------
+#define NEBULA_NML_NAME              NAUTO_NML_NAME
+#define NEBULA_NML_VERSION           NAUTO_NML_VERSION
+#define NEBULA_NML_STRING            NAUTO_NML_STRING
+#define NEBULA_NML_BUGREPORT         NAUTO_NML_BUGREPORT
+#define NEBULA_NML_URL               NAUTO_NML_URL
+#define NEBULA_NML_VERSION_MAJOR     NAUTO_NML_VERSION_MAJOR
+#define NEBULA_NML_VERSION_MINOR     NAUTO_NML_VERSION_MINOR
+#define NEBULA_NML_VERSION_MICRO     NAUTO_NML_VERSION_MICRO
+
+/** @} */
+
+#endif // NIC_F5BC3B7209491175_NIC

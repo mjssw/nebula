@@ -1,0 +1,12 @@
+prefix=@prefix@
+exec_prefix=@exec_prefix@
+libdir=@libdir@
+includedir=@includedir@
+
+Name: Nebula.NML
+Description: NML Parser
+Version: 0.0.0
+URL: https://www.github.com/defudger/nebula
+Requires: nebula-foundation >= 0.0.0
+Cflags:
+Libs: -L${libdir} -lnebula-nml
