@@ -98,6 +98,7 @@ foundation/filesystem/remove.h \
 foundation/filesystem/rename.h \
 foundation/filesystem/scan.h \
 foundation/filesystem/types.h \
+foundation/format/base64_codec.h \
 foundation/format/config.h \
 foundation/format/digit_codec.h \
 foundation/format/fwrite/bool.h \

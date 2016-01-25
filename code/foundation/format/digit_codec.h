@@ -29,12 +29,15 @@ namespace nebula { namespace foundation { namespace fmt {
  * */
 //------------------------------------------------------------------------------
 /** A simple policy to map the digits "0123456789ABCDEF" to numbers and vice 
- * versa.
+ *  versa.
  * 
- * This is a 'more or less' bijective map of the form char<->unsigned, 
- * where the right direction decodes a glyph (which must fit into a char) and
- * returns the respective numeric value and the left direction encodes number
- * to a glyph.
+ *  This is a 'more or less' bijective map of the form char<->unsigned, 
+ *  where the right direction decodes a glyph (which must fit into a char) and
+ *  returns the respective numeric value and the left direction encodes number
+ *  to a glyph.
+ *
+ *  The nothrow versions of encode() and decode() return 0 respectively
+ *  unsigned(-1) to indicate an error.
  * */
 struct digit_codec
 {
@@ -45,37 +48,48 @@ struct digit_codec
      * @throw out_of_range If x >= size::value.
      * */
     inline static char encode(unsigned x) {
+        const char res = encode(x, nothrow_tag());
+        if(0 == res)
+            n_throw(out_of_range);
+        return res;
+    }
+    /** Maps a number to a digit. 
+     *  @throw nothing
+     *  @return 0 if encoding failed, otherwise a character representing
+     *  a digit.
+     * */
+    inline static char encode(unsigned x, nothrow_tag) noexcept {
         static const char *digits = "0123456789ABCDEF";
         if(x >= size::value)
-            n_throw(out_of_range);
+            return 0;
         return digits[x];
     }
     /** Maps a number to a digit.
      * @throw out_of_range If the character couldn't be mapped.
      * */
     inline static unsigned decode(char x) {
+        unsigned res = decode(x, nothrow_tag());
+        if(res == -1)
+            n_throw(out_of_range);
+        return res;
+    }
+    /** Maps a number to a digit.
+     *  @return unsigned(-1) if encoding failed, otherwise the value the
+     *  parameter x stands for.
+     * */
+    inline static unsigned decode(char x, nothrow_tag) noexcept {
         switch(x)
         {
-        case '0':
-            return 0;
-        case '1':
-            return 1;
-        case '2':
-            return 2;
-        case '3':
-            return 3;
-        case '4':
-            return 4;
-        case '5':
-            return 5;
-        case '6':
-            return 6;
-        case '7':
-            return 7;
-        case '8':
-            return 8;
-        case '9':
-            return 9;
+        case '0': return 0;
+        case '1': return 1;
+        case '2': return 2;
+        case '3': return 3;
+        case '4': return 4;
+        case '5': return 5;
+        case '6': return 6;
+        case '7': return 7;
+        case '8': return 8;
+        case '9': return 9;
         case 'a':
         case 'A':
             return 10;        
@@ -95,8 +109,7 @@ struct digit_codec
         case 'F':
             return 15;
         default:
-            n_throw(out_of_range);
-            return 0;
+            return -1;
         }
     }
 };

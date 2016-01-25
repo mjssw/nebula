@@ -20,164 +20,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef NIC_D305D5041316DFC9_NIC
 #define NIC_D305D5041316DFC9_NIC
 
-#include "../../io.h"
-#include "../fwrite.h"
+#include "../base64_codec.h"
 
 namespace nebula { namespace foundation { namespace fmt {
 /** @ingroup Foundation
  * @{
  * */
-namespace base64_detail {
-//------------------------------------------------------------------------------
-static constexpr const char *b64_ascii =
-    "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-    "abcdefghijklmnopqrstuvwxyz"
-    "0123456789"
-    "+/";
-//------------------------------------------------------------------------------
-template <class Sink>
-inline void encode(const bool padding, const char *ascii,
-    const char *buf_, const size_t n, Sink &&out)
-{
-    n_static_assert(n_char_bit == 8, "");
-    
-    if(0 == n)
-        return;
-    if(!buf_)
-        n_throw(logic_error);
-    
-    const unsigned char *buf = static_cast<const unsigned char *>(
-        static_cast<const void *>(buf_));
-    
-    char chnk[4];
-    
-    size_t i = 0;
-    for( ; i+2 < n; i += 3)
-    {
-        // 12345678 12345678 12345678
-        // ^ a   ^ b    ^ c    ^ d
-        
-        unsigned x = buf[i] >> 2;
-        chnk[0] = ascii[x];
-        
-        x = (buf[i] & 0b11) << 4;
-        x |= buf[i+1] >> 4;
-        chnk[1] = ascii[x];
-        
-        x = (buf[i+1] & 0b1111) << 2;
-        x |= buf[i+2] >> 6;
-        chnk[2] = ascii[x];
-        
-        x = buf[i+2] & 0b111111;
-        chnk[3] = ascii[x];
-        
-        io::write(out, chnk, 4);
-    }
-    
-    switch(n-i)
-    {
-    case 2:
-        {
-            unsigned x = buf[i] >> 2;
-            chnk[0] = ascii[x];
-            
-            x = (buf[i] & 0b11) << 4;
-            x |= buf[i+1] >> 4;
-            chnk[1] = ascii[x];
-            
-            x = (buf[i+1] & 0b1111) << 2;
-            chnk[2] = ascii[x];
-            
-            io::write(out, chnk, 3);
-            
-            if(padding)
-                io::put(out, '=');
-        }
-        break;
-    case 1:
-        {
-            unsigned x = buf[i] >> 2;
-            chnk[0] = ascii[x];
-            
-            x = (buf[i] & 0b11) << 4;
-            chnk[1] = ascii[x];
-            
-            io::write(out, chnk, 2);
-            
-            if(padding)
-                io::write(out, "==", 2);
-        }
-        break;
-    default: break;
-    }
-}
-//------------------------------------------------------------------------------
-template <class Sink>
-class wrapping_sink : public io::stream_base
-{
-public:
-    using stream_size = io::_stream_size<Sink>;
-    using stream_offset = io::_stream_offset<Sink>;
-    using stream_position = io::_stream_position<Sink>;
-    using stream_category = tag<io::out_tag>;
-    
-    inline wrapping_sink(Sink &s_, const size_t cols) noexcept
-    : s(s_), ncols(cols), col(0)
-    {
-        if(0 == ncols)
-            n_throw(logic_error);
-    }
-    
-    inline void write(const char *buf, const size_t n)
-    {
-        if(col + n <= ncols)
-        {
-            io::write(s, buf, n);
-            col += n;
-        }
-        else
-        {
-            size_t m = ncols-col;
-            
-            if(m)
-                io::write(s, buf, m);
-            
-            fmt::fwrite(s, fmt::endl);
-            col = 0;
-            
-            for( ; m + ncols < n; m += ncols)
-            {
-                io::write(s, buf + m, ncols);
-                fmt::fwrite(s, fmt::endl);
-            }
-            
-            if(m < n)
-            {
-                col = n - m;
-                io::write(s, buf + m, col);
-            }
-        }
-    }
-    inline void put(const char c)
-    {
-        if(col == ncols)
-        {
-            fmt::fwrite(s, fmt::endl);
-            col = 0;
-        }
-        
-        io::put(s, c);
-        ++col;
-    }
-
-private:
-    Sink &s;
-    const size_t ncols;
-    size_t col;
-};
-
-} // base64_detail
-
 //------------------------------------------------------------------------------
 /** Simple base64 encoder.
  *
@@ -215,8 +63,7 @@ public:
     template <class Sink>
     inline void operator () (Sink &snk, fout_tag) const
     {
-        base64_detail::encode(N_FORMAT_DEFAULT_BASE64_PADDING,
-            base64_detail::b64_ascii, buf, n, snk);
+        base64_encode(buf, n, snk);
     }
     
 private:
@@ -267,11 +114,7 @@ public:
     template <class Sink>
     inline void operator () (Sink &snk, fout_tag) const
     {
-        if(ncols == 0)
-            base64_detail::encode(pad, base64_detail::b64_ascii, buf, n, snk);
-        else
-            base64_detail::encode(pad, base64_detail::b64_ascii, buf, n,
-                base64_detail::wrapping_sink<Sink>(snk, ncols));
+        base64_encode(pad, ncols, buf, n, snk);
     }
     
 private:
