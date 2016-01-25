@@ -27,6 +27,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define N_FORMAT_DEFAULT_PRECISION 6
 #define N_FORMAT_DEFAULT_ROUNDING_STYLE \
     ::nebula::foundation::math::rounding_style::to_nearest
+#define N_FORMAT_DEFAULT_BASE64_PADDING true
 
 /** @} */
 

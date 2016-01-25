@@ -272,6 +272,31 @@ inline typename range_size<T>::type size(const T &r) noexcept
     n_static_assert(noexcept(size_impl<T>::apply(r)), "Must not throw");
     return size_impl<T>::apply(r);
 }
+//------------------------------------------------------------------------------
+template <class T>
+struct data_impl
+{
+    template <class R>
+    inline static 
+    typename range_pointer<typename remove_reference<R>::type>::type 
+    apply(R &&r) noexcept
+    {
+        n_static_assert(noexcept(r.data()), "Must not throw");
+        return r.data();
+    }
+};
+//------------------------------------------------------------------------------
+/** @return A pointer to the stored array.
+ * @attention Must be noexcept. */
+template <class T>
+inline typename range_pointer<typename remove_reference<T>::type>::type
+data(T &&r) noexcept
+{
+    n_static_assert(
+        noexcept(data_impl<typename decay<T>::type>::apply(r)),
+        "Must not throw");
+    return begin_impl<typename decay<T>::type>::apply(r);
+}
 
 /** @} */
 

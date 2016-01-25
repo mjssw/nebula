@@ -114,6 +114,7 @@ foundation/format/interp.h \
 foundation/format/tags.h \
 foundation/format/to_integer.h \
 foundation/format/to_string.h \
+foundation/format/writer/base64.h \
 foundation/format/writer/bin.h \
 foundation/format/writer/dec.h \
 foundation/format/writer/endl.h \
