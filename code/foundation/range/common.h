@@ -295,7 +295,7 @@ data(T &&r) noexcept
     n_static_assert(
         noexcept(data_impl<typename decay<T>::type>::apply(r)),
         "Must not throw");
-    return begin_impl<typename decay<T>::type>::apply(r);
+    return data_impl<typename decay<T>::type>::apply(r);
 }
 
 /** @} */
