@@ -98,9 +98,9 @@ foundation/filesystem/remove.h \
 foundation/filesystem/rename.h \
 foundation/filesystem/scan.h \
 foundation/filesystem/types.h \
-foundation/format/base64_codec.h \
 foundation/format/config.h \
 foundation/format/digit_codec.h \
+foundation/format/detail/wrapping_sink.h \
 foundation/format/fwrite/bool.h \
 foundation/format/fwrite/char.h \
 foundation/format/fwrite/cstring.h \
@@ -115,6 +115,7 @@ foundation/format/interp.h \
 foundation/format/tags.h \
 foundation/format/to_integer.h \
 foundation/format/to_string.h \
+foundation/format/writer/base16.h \
 foundation/format/writer/base64.h \
 foundation/format/writer/bin.h \
 foundation/format/writer/dec.h \

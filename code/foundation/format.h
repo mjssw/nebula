@@ -46,6 +46,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "format/writer/type.h"
 
+#include "format/writer/base16.h"
 #include "format/writer/base64.h"
 
 namespace nebula { namespace foundation {
